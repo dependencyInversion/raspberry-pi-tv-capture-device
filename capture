@@ -1,0 +1,61 @@
+#! /usr/bin/python3
+
+import subprocess
+import time
+
+now_str = time.strftime('%Y-%m-%d_%%S')
+file_name = f'vid_720p_60_{now_str}.avi'
+
+command = [
+    'ffmpeg',
+    '-f', 'v4l2',
+    '-input_format', 'mjpeg',
+    '-thread_queue_size', '5000'
+    '-framerate', '30',
+    '-i', '/dev/video0',
+    '-f', 'alsa',
+    '-thread_queue_size', '5000',
+    '-i', 'plughw:1,0',
+    '-acodec', 'pcm_s16le',
+    '-ac', '1',
+    '-ar', '96000',
+    '-copytb', '1',
+    '-use_wallclock_as_timestamps', '1',
+    '-c:a', 'aac',
+    '-b:a', '128k',
+    '-ar', '44100',
+    '-b:v', '4M',
+    '-c:v', 'h264_omx',
+    '-f', 'flv',
+    file_name
+]
+
+def print_and_parse_output(output, p):
+    print(output)
+
+def stop_recoding(proc):
+    proc.stdin.write('q\n')
+
+def overwrite_file_if_exists(output, file_name, proc):
+    if output == 'File ' + file_name + ' already exists. Overwrite ? [y/N]':
+        proc.stdin.write('y\n')
+
+
+with subprocess.Popen(
+        command,
+        universal_newlines=True,
+        shell=False,
+        stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE
+        )as proc:
+
+    elapsed_seconds = 0
+    recording_length_in_seconds = 60 * 3
+    start_time = int ( time.time() )
+
+    while elapsed_seconds < recording_length_in_seconds:
+        time.sleep(1)
+        elapsed_seconds = int ( time.time() ) - start_time
+        print(elapsed_seconds)
+    
+    proc.stdin.write('q\n')
