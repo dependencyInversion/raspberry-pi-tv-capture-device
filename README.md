@@ -5,4 +5,4 @@ In this repo I try to build my grandma a service with which she can capture and 
 ## resources
 
 - [Cheap HDMI USB Capture Card on a Raspberry Pi 4](https://www.rickmakes.com/cheap-hdmi-usb-capture-card-on-a-raspberry-pi-4/)
--  [ALSA buffer xrun induced by low quality source in ffmpeg capture](https://stackoverflow.com/questions/28359855/alsa-buffer-xrun-induced-by-low-quality-source-in-ffmpeg-capture#31016087)
+-  [How to get PulseAudio running?](https://raspberrypi.stackexchange.com/questions/639/how-to-get-pulseaudio-running#1544)
